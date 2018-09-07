@@ -422,11 +422,32 @@ var nthFibo = function(n) {
 // 27. Given an array of words, return a new array containing each word capitalized.
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
-var capitalizeWords = function(array) {};
+
+var capitalizeWords = function(array) {
+  if (array.length === 0) {
+    return [];
+  } else {
+    return [array[0].toUpperCase()].concat(capitalizeWords(array.slice(1)));
+  }
+};
 
 // 28. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car','poop','banana']); // ['Car','Poop','Banana']
-var capitalizeFirst = function(array) {};
+
+var capitalizeWord = function(string) {
+  var result = '';
+
+  result += string[0].toUpperCase() + string.slice(1);
+  return result;
+}
+
+var capitalizeFirst = function(array) {
+  if (array.length === 0) {
+    return [];
+  } else {
+    return [capitalizeWord(array[0])].concat(capitalizeFirst(array.slice(1)));
+  }
+};
 
 // 29. Return the sum of all even numbers in an object containing nested objects.
 // var obj1 = {
@@ -437,46 +458,189 @@ var capitalizeFirst = function(array) {};
 //   e: {e: {e: 2}, ee: 'car'}
 // };
 // nestedEvenSum(obj1); // 10
-var nestedEvenSum = function(obj) {};
+
+var nestedEvenSum = function(obj) {
+  var sum = 0;
+  for (var key in obj) {
+    if (obj[key] % 2 === 0) {
+      sum += obj[key];
+    }
+    if (typeof obj[key] === 'object') {
+      sum += nestedEvenSum(obj[key]);
+    }
+  }
+  return sum;
+};
 
 // 30. Flatten an array containing nested arrays.
 // flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
-var flatten = function(array) {};
+
+var flatten = function(array) {
+  if (array.length === 0) {
+    return [];
+  }
+  if (Array.isArray(array[0])) {
+    return flatten(array[0]).concat(flatten(array.slice(1)));
+  } else {
+    return [array[0]].concat(flatten(array.slice(1)));
+  };
+};
 
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
-var letterTally = function(str, obj) {};
+
+var letterTally = function(str, obj = {}) {
+  if (str === '') {
+    return null;
+  }
+  if (!obj.hasOwnProperty(str[0])) {
+    obj[str[0]] = 1;
+  } else {
+    obj[str[0]] += 1;
+  }
+  letterTally(str.slice(1), obj);
+  return obj;
+};
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
 // elements they should be replaced with a single copy of the element. The order of the
 // elements should not be changed.
 // compress([1,2,2,3,4,4,5,5,5]) // [1,2,3,4,5]
 // compress([1,2,2,3,4,4,2,5,5,5,4,4]) // [1,2,3,4,2,5,4]
-var compress = function(list) {};
+
+var compress = function(list) {
+  if (list.length === 0) {
+    return [];
+  }
+  if (list[0] === list[1]) {
+    return compress(list.slice(1));
+  } else {
+    return [list[0]].concat(compress(list.slice(1)));
+  }
+};
 
 // 33. Augument every element in a list with a new value where each element is an array
 // itself.
 // augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
-var augmentElements = function(array, aug) {};
+
+var augmentElements = function(array, aug) {
+  if (array.length === 0) {
+    return [];
+  } else {
+    var currentElement = array[0].slice();
+    currentElement.push(aug);
+    var theRestOfArray = augmentElements(array.slice(1), aug);
+    var result = [currentElement].concat(theRestOfArray);
+    // return [currentElement.push(aug)].concat(augmentElements(array.slice(1), aug));
+    return result;
+  }
+};
 
 // 34. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
-var minimizeZeroes = function(array) {};
+var minimizeZeroes = function(array) {
+  if (array.length === 0) {
+    return [];
+  }
+  if (array[0] === 0 && array[1] === 0) {
+    return minimizeZeroes(array.slice(1));
+  } else {
+    return [array[0]].concat(minimizeZeroes(array.slice(1)));
+  }
+};
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
 // their original sign. The first number in the index always needs to be positive.
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
-var alternateSign = function(array) {};
+
+var alternateSign = function(array) {
+  var newArray = [];
+  if (array.length === 0) {
+    return newArray;
+  }
+
+  if (array[0] < 0) {
+    array[0] *= -1;
+  }
+  newArray.push(array[0]);
+
+  if (array[1] > 0) {
+    array[1] *= -1;
+  }
+  newArray.push(array[1]);
+
+  return [newArray[0], newArray[1]].concat(alternateSign(array.slice(2)));
+};
 
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
-var numToText = function(str) {};
+
+/*
+  BASE CASE: if empty string return empty string ''
+  RECURSION: slice through until we hit a number
+
+"I have 5 dogs and 6 ponies"
+      ^
+ 5 ==> str[5]
+
+FINAL STRING: + 'a' + 'five'
+ 'a5' >> 'afive'
+
+'m' + 'y 5 dogs and 6 ponies'
+'y' + ' 5 dogs and 6 ponies'
+
+'5' + ' dogs and 6 ponies'
+numbers[5]
+
+  PSEDUO:
+  if it's a number
+    convert to the text value
+
+    var str = 'dog'
+    "D" += str.slice()
 
 
-// *** EXTRA CREDIT ***
+    "5 dogs and"
+     ^
+// my 5 dogs and 6 ponies
+'m' + 'y' + ' ' + 'five' + ' dogs and 6 ponies'
+  'y' + ' 5 dogs and 6 ponies'
+    ' ' + '5 dogs and 6 ponies'
+      '5' + ' dogs and 6 ponies'
+
+progressively smaller strings:
+look at the first character in the string
+if its a number, convert it to the number/word equivalent
+and add it to the rest of the string, where the rest of the string has had all of its numbers converted
+
+'m5m' = convert(m) + numToText('5m')
+convert(5m) = 'five' + 'm'
+convert(m) = m + ''
+convert('') = ''
+
+
+
+str = newChar str[0] +
+
+"5 dogs and"
+*/
+var numToText = function(str) {
+  var numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  var firstChar = str[0]; // 'm'
+  if (str === '') {
+    return '';
+  } // Number(' ') >> 0
+  if (!Number.isNaN(parseInt(firstChar))) {
+    firstChar = numbers[parseInt(firstChar)];
+  }
+  return firstChar + numToText(str.slice(1));
+};
+
+
+// *** EXTRA CREsDIT ***
 
 // 37. Return the number of times a tag occurs in the DOM.
 var tagCount = function(tag, node) {};
