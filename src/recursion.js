@@ -578,55 +578,6 @@ var alternateSign = function(array) {
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 
-/*
-  BASE CASE: if empty string return empty string ''
-  RECURSION: slice through until we hit a number
-
-"I have 5 dogs and 6 ponies"
-      ^
- 5 ==> str[5]
-
-FINAL STRING: + 'a' + 'five'
- 'a5' >> 'afive'
-
-'m' + 'y 5 dogs and 6 ponies'
-'y' + ' 5 dogs and 6 ponies'
-
-'5' + ' dogs and 6 ponies'
-numbers[5]
-
-  PSEDUO:
-  if it's a number
-    convert to the text value
-
-    var str = 'dog'
-    "D" += str.slice()
-
-
-    "5 dogs and"
-     ^
-// my 5 dogs and 6 ponies
-'m' + 'y' + ' ' + 'five' + ' dogs and 6 ponies'
-  'y' + ' 5 dogs and 6 ponies'
-    ' ' + '5 dogs and 6 ponies'
-      '5' + ' dogs and 6 ponies'
-
-progressively smaller strings:
-look at the first character in the string
-if its a number, convert it to the number/word equivalent
-and add it to the rest of the string, where the rest of the string has had all of its numbers converted
-
-'m5m' = convert(m) + numToText('5m')
-convert(5m) = 'five' + 'm'
-convert(m) = m + ''
-convert('') = ''
-
-
-
-str = newChar str[0] +
-
-"5 dogs and"
-*/
 var numToText = function(str) {
   var numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
   var firstChar = str[0]; // 'm'
